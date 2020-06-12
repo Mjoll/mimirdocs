@@ -60,7 +60,17 @@ some errors.
 
 ### Creating a minimal configuration file
 
-Create a file named ```/opt/mimir/config.json```, containing the following JSON:
+Create a file named ```/opt/mimir/config.json```:
+
+```
+sudo rmdir /opt/mimir/config.json
+editor /opt/mimir/config.json
+```
+
+You can replace the ```editor``` command above with your favorite text editor.
+
+Edit the contents of the ```config.json``` file to contain these settings:
+
 ```
 {
     "AWS_SERVICE_ROOT_API": "https://prod.mimir.tv/api/v1",
@@ -90,7 +100,7 @@ SERVER_FOLDER value refers to a file system path outside the Docker container.
 Running the processor for the first time:
 
 ```
-docker run --interactive --tty \
+docker run --interactive --tty --rm \
   --volume /opt/mimir/config.json:/processor/config.json \
   --volume /opt/mimir/production:/mnt/production mjoll/processor
 ```
@@ -147,7 +157,7 @@ To permanently select the workflow named "my_workflow", insert the following
 setting into the config.json file:
 
 ```
-    "IMPORT_WORKFLOW": "5d3ba6ee-f4c8-44e7-b00f-8615d5ce0383"
+"IMPORT_WORKFLOW": "5d3ba6ee-f4c8-44e7-b00f-8615d5ce0383"
 ```
 ## Running the container detached
 
@@ -170,17 +180,28 @@ Here is a ```config.json``` example that provides the minimal set of setting nee
 With such a configuration file, you can run the Docker container like this:
 
 ```
-docker run --detach \
+docker run --detach --restart always --name mimir-processor \
   --volume /opt/mimir/config.json:/processor/config.json \
   --volume /opt/mimir/production:/mnt/production mjoll/processor
 ```
 
 The this command will print out a container id such as
 ```8ceef449868264d535fd4a8a07e0a3cca54392bd3a4c69447826d04519a64a1c```which can
-be used to inspect, kill and restart the container in the future.
+be used to inspect, kill, restart and remove the container in the future. The
+example command-line also gives the container the name ```mimir-processor```
+which can be used in place of the container id as a convenience.
 
 Refer to the Docker documentation for more information about how to manage
 Docker containers in general.
+
+# Stopping and deleting the container permanently
+
+To remove a deployment of the Mimir processor, run the following commands.
+
+```
+docker kill mimir-processor
+docker rm mimir-processor
+```
 
 # Setting up directory roles
 
@@ -225,8 +246,6 @@ As a side-effect of specifying a volume mount location that did not exist, Docke
 sudo rmdir /opt/mimir/config.json
 editor /opt/mimir/config.json
 ```
-
-You can replace the ```editor``` command above with your favorite text editor.
 
 ## Missing /tmp/import/Workflow.json
 
