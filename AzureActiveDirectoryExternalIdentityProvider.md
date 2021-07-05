@@ -1,17 +1,17 @@
-# Configure Active Directory as an external identity provider for Mimir
+# Configure Azure Active Directory as an external identity provider for Mimir
 
 ## Overview of registration process
 
 1. Obtain the following information from Mjoll support:
-    1. Identifier (Entity ID)
-    2. Reply URL (Assertion Consumer Service URL)
+    * Identifier (Entity ID)
+    * Reply URL (Assertion Consumer Service URL)
 2. Configure Mimir as an Azure Active Directory Enterprise Application
 3. Provide the following information to Mjoll support:
-    3. The “Federated Metadata XML” file.
-    4. The email domain address you claim ownership of.
+    * The “Federated Metadata XML” file.
+    * The email domain address you claim ownership of.
 4. Wait for Mjoll support to:
-    5. Verify that you own the email domain address given.
-    6. Register your Azure Active Directory as an external identity provider for 
+    1. Verify that you own the email domain address given.
+    2. Register your Azure Active Directory as an external identity provider for 
 
 ## Obtain information from Mjoll support
 
@@ -45,72 +45,24 @@ Go to Microsoft Azure → Azure Active Directory → Enterprise application → 
 
 Verify that the following claim required by SAML has been set up. This should be the default configuration, meaning that you don’t have to edit the claims.
 
-<table>
-  <tr>
-   <td><strong>Claim name</strong>
-   </td>
-   <td><strong>Value / Source Attribute</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>Unique User Identifier (Name ID)
-   </td>
-   <td>user.userprincipalname
-   </td>
-  </tr>
-</table>
+| Claim name | Value / Source Attribute |
+| ---------- | ------------------------ |
+| Unique User Identifier (Name ID) | user.userprincipalname |
 
 Verify that the following additional claims required by the Mimir integration have been set up.  This should be the default configuration, meaning that you don’t have to edit the claims.
 
-<table>
-  <tr>
-   <td><strong>Claim name</strong>
-   </td>
-   <td><strong>Value / Source Attribute</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress
-   </td>
-   <td>user.mail
-   </td>
-  </tr>
-  <tr>
-   <td>http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name
-   </td>
-   <td>user.userprincipalname
-   </td>
-  </tr>
-  <tr>
-   <td>http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname
-   </td>
-   <td>user.givenname
-   </td>
-  </tr>
-  <tr>
-   <td>http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname
-   </td>
-   <td>user.surname
-   </td>
-  </tr>
-</table>
+| Claim name | Value / Source Attribute |
+| --------- | ------------------------ |
+| http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress | user.mail |
+| http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name | user.userprincipalname |
+| http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname | user.givenname |
+| http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname | user.surname |
 
 Optionally, to allow Azure Active Directory groups to be used to assign Mimir user permissions, add the following group claim. This claim is not part of the default configuration, meaning that if you’d like to make Azure Active Directory groups available for use in Mimir, you will need to add this claim.
 
-<table>
-  <tr>
-   <td><strong>Claim name</strong>
-   </td>
-   <td><strong>Value / Source Attribute</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>http://schemas.microsoft.com/ws/2008/06/identity/claims/groups
-   </td>
-   <td>user.groups [All]
-   </td>
-  </tr>
-</table>
+| Claim name | Value / Source Attribute |
+| --------- | ------------------------ |
+| http://schemas.microsoft.com/ws/2008/06/identity/claims/groups | user.groups [All] |
 
 1. Click “Add a group claim”.
 2. For the “Which groups associated with the user should be returned in the claim” prompt, select “All groups”.
