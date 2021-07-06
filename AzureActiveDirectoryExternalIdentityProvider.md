@@ -97,6 +97,34 @@ Send the following information to Mjoll support:
 * The “Federated Metadata XML” file you downloaded.
 * The email domain name you claim ownership of.
 
+## Assigning Mimir Permissions to Azure Active Directory groups
+
+Permission to perform Mimir action is assigned to an Azure Active Directory group by assigning permissions to matching group definitions in Mimir.
+
+### Creating a matching Mimir group definiton
+
+Go to Azure → Azure Active Directory → Groups
+
+Collect the group identity and display label of the desired group from the "Object Id" and "Name" properties of an Azure Active Directory group.
+
+| Group information | Azure Active Directory group property | Mimir group property |
+| ----------------- | ------------------------------------- | -------------------- |
+| Identity          | Object Id                             | Name                 |
+| Display label     | Name                                  | Short description    |
+
+Go to Mimir → Profile menu → My organization → Groups → "+" (Add new group)
+
+Create a matching group definition in Mimir by entering in its identity as the "Group name", and the display label as the "Short description".
+
+Note that while both Azure Active Directory and Mimir has group properties called "Name", they serve different purposes, since one the Azure Active Directory group name represents a human readable display label, while the Mimir group name represents the identity of the group, used to match the Mimir group definition with the Azure Active Directory group definition.
+
+Technically, only matching identifiers are needed to attach Azure Active Directory groups to permissions assigned to Mimir groups. However, we recommend also matching the display labels to make it easier for administrators to see what group definitions exists at a glance.
+
+The effective permissions of a user signing into Mimir using an external Azure Active Directory account is the aggregate permissions of all the Mimir groups matching Azure Active Directory groups they are members of, and also the permissions from the Mimir group named "Organization", if such a group exists.
+
+
+
+
 ## Troubleshooting
 
 ### User is not assigned to a role for the application
