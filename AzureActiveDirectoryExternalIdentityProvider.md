@@ -122,8 +122,21 @@ Technically, only matching identifiers are needed to attach Azure Active Directo
 
 The effective permissions of a user signing into Mimir using an external Azure Active Directory account is the aggregate permissions of all the Mimir groups matching Azure Active Directory groups they are members of, and also the permissions from the Mimir group named "Organization", if such a group exists.
 
+### Refreshing security token
 
+Users may need to log out of both Mimir and their Azure Active Directory account and then log back in again for any of the following changes to take effect:
+ * Editing the mapping of groups to SAML claims in Azure Active Directory.
+ * Editing group membership in Azure Active Directory.
+ * Creation of matching groups in Mimir.
+ * Editing of Mimir permissions attached to a group in Mimir.
 
+In addition, it can take up to five minutes for group permission changes to propagate and take effect everywhere.
+
+Therefore, if you've made any of these changes, perform the following steps:
+ * Sign out of the Mimir UI.
+ * Sign out of your Azure Active Directory account.
+ * Wait until at least five minutes has passed since any administrative account or group change.
+ * Sign in to the Mimir UI using your Azure Active Directory account.
 
 ## Troubleshooting
 
@@ -144,3 +157,15 @@ Cause: Either the Reply URL (Assertion Consumer Service URL) or Identifier (Enti
 Resolution #1: Follow the instructions in section “Set up Basic SAML Configuration”.
 
 Resolution #2: Ask Mjoll support to verify the Identifier (Entity ID) and Reply URL (Assertion Consumer Service URL) they have given you match the geographical region of your tenant instance.
+
+### Missing group permissions
+
+Problem: After logging in, the user does not have permission to perform all the Mimir actions that they expect.
+
+Cause #1: The security token they were issued during login does not contain up-to-date information.
+
+Resolution #1: Follow the instructions in section "Refreshing Security Token".
+
+Cause #2: The Azure Active Directory group Object Id does not match the Mimir group name.
+
+Resolution #2: Follow the instructions in section "Creating a matching Mimir group definiton".
