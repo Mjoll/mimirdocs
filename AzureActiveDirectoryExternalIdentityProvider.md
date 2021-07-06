@@ -183,7 +183,7 @@ Cause: Mimir requires users to have email addresses attached to them, however, t
 
 Resolution #1: Follow the instructions in the section "Assigning email addresses to Azure Active Directory users".
 
-Resolution #2: Follow the instructions in the section "### Set up user attributes and claims".
+Resolution #2: Follow the instructions in the section "Set up user attributes and claims".
 
 ### Missing group permissions
 
