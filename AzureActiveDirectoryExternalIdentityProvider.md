@@ -122,6 +122,16 @@ Technically, only matching identifiers are needed to attach Azure Active Directo
 
 The effective permissions of a user signing into Mimir using an external Azure Active Directory account is the aggregate permissions of all the Mimir groups matching Azure Active Directory groups they are members of, and also the permissions from the Mimir group named "Organization", if such a group exists.
 
+### Assigning email addresses to Azure Active Directory users
+
+Mimir requires users to have email addresses.
+
+Go to Azure → Azure Active Directory → Users → {User} → Edit → Contact Information → Email
+
+Enter the email address which you wish Mimir to associate with the user in the "Email" field.
+
+Click the "Save" button.
+
 ### Signing in using Azure administrator accounts
 
 We've observed that it is possible to assign Azure administrator accounts to Enterprise Applications in Azure Active Directory. Signing into Mimir using these accounts seems to work, but we've observed that Mimir does not receive any group information from these accounts. If you encounter this problem, you have two options:
@@ -164,6 +174,16 @@ Cause: Either the Reply URL (Assertion Consumer Service URL) or Identifier (Enti
 Resolution #1: Follow the instructions in section “Set up Basic SAML Configuration”.
 
 Resolution #2: Ask Mjoll support to verify the Identifier (Entity ID) and Reply URL (Assertion Consumer Service URL) they have given you match the geographical region of your tenant instance.
+
+### Invalid user attributes: email: The attribute is required
+
+Problem: server_error: Error in SAML response processing: Invalid user attributes: email: The attribute is required
+
+Cause: Mimir requires users to have email addresses attached to them, however, the SAML response from Azure Active Directory did not contain any email address.
+
+Resolution #1: Follow the instructions in the section "Assigning email addresses to Azure Active Directory users".
+
+Resolution #2: Follow the instructions in the section "### Set up user attributes and claims".
 
 ### Missing group permissions
 
