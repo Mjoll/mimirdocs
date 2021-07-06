@@ -122,6 +122,13 @@ Technically, only matching identifiers are needed to attach Azure Active Directo
 
 The effective permissions of a user signing into Mimir using an external Azure Active Directory account is the aggregate permissions of all the Mimir groups matching Azure Active Directory groups they are members of, and also the permissions from the Mimir group named "Organization", if such a group exists.
 
+### Signing in using Azure administrator accounts
+
+We've observed that it is possible to assign Azure administrator accounts to Enterprise Applications in Azure Active Directory. Signing into Mimir using these accounts seems to work, but we've observed that Mimir does not receive any group information from these accounts. If you encounter this problem, you have two options:
+
+ 1. Create a regular account within Azure Active Directory, and assign it to the Active Directory groups with matching Mimir groups as a way of assigning them Mimir permissions.
+ 2. Create and configure a Mimir "Organization" group which provides permissions. Any permissions assigned to this Mimir group will be given to all users authenticated by Azure Active Directory, including any Azure administrator accounts.
+
 ### Refreshing security token
 
 Users may need to log out of both Mimir and their Azure Active Directory account and then log back in again for any of the following changes to take effect:
@@ -169,3 +176,7 @@ Resolution #1: Follow the instructions in section "Refreshing Security Token".
 Cause #2: The Azure Active Directory group Object Id does not match the Mimir group name.
 
 Resolution #2: Follow the instructions in section "Creating a matching Mimir group definiton".
+
+Cause #3: Azure Active Directory does not expose group membership for Azure administrator accounts to Mimir.
+
+Resolution #3: Follow the instructions in section "Signing in using Azure administrator accounts".
