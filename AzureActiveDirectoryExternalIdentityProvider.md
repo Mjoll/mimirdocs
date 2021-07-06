@@ -134,7 +134,7 @@ In addition, it can take up to five minutes for group permission changes to prop
 
 Therefore, if you've made any of these changes, perform the following steps:
  * Sign out of the Mimir UI.
- * Sign out of your Azure Active Directory account.
+ * Sign out of your Azure Active Directory account. Follow the instructions specific to your organization, or sign out from https://myaccount.microsoft.com/
  * Wait until at least five minutes has passed since any administrative account or group change.
  * Sign in to the Mimir UI using your Azure Active Directory account.
 
