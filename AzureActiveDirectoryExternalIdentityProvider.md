@@ -71,7 +71,7 @@ Optionally, to allow Azure Active Directory groups to be used to assign Mimir us
 
 ### Assign users to the enterprise application
 
-Before any users can use the Mimir, Azure Active Directory requires you to assign users to the enterprise application representing Mimir in Active Directory.
+Before any users can use Mimir, Azure Active Directory requires you to assign users to the enterprise application representing Mimir in Active Directory.
 
 Azure Active Directory provides several ways of managing access to applications, however this document only describes direct assignment of users.
 
@@ -101,7 +101,7 @@ Send the following information to Mjoll support:
 
 Permission to perform Mimir action is assigned to an Azure Active Directory group by assigning permissions to matching group definitions in Mimir.
 
-### Creating a matching Mimir group definiton
+### Creating a matching Mimir group definition
 
 Go to Azure → Azure Active Directory → Groups
 
@@ -195,7 +195,7 @@ Resolution #1: Follow the instructions in section "Refreshing Security Token".
 
 Cause #2: The Azure Active Directory group Object Id does not match the Mimir group name.
 
-Resolution #2: Follow the instructions in section "Creating a matching Mimir group definiton".
+Resolution #2: Follow the instructions in section "Creating a matching Mimir group definition".
 
 Cause #3: Azure Active Directory does not expose group membership for Azure administrator accounts to Mimir.
 
