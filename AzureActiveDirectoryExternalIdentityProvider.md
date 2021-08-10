@@ -11,7 +11,7 @@
     * The email domain address you claim ownership of.
 4. Wait for Mjoll support to:
     1. Verify that you own the email domain address given.
-    2. Register your Azure Active Directory as an external identity provider for 
+    2. Register your Azure Active Directory as an external identity provider 
 
 ## Obtain information from Mjoll support
 
