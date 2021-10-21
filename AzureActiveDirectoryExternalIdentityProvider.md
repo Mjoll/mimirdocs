@@ -65,7 +65,7 @@ Optionally, to allow Azure Active Directory groups to be used to assign Mimir us
 | http://schemas.microsoft.com/ws/2008/06/identity/claims/groups | user.groups [All] |
 
 1. Click “Add a group claim”.
-2. For the “Which groups associated with the user should be returned in the claim” prompt, select “All groups”.
+2. For the “Which groups associated with the user should be returned in the claim” prompt, select “Groups assigned to the application”.
 3. For the “Source attribute” prompt choose the default “Group ID” option.
 4. Click “Save”.
 
