@@ -199,6 +199,18 @@ Example response for validation informing the user that something needs to be ad
 }
 ```
 
+### Metadata buttons
+
+Specifically introduced for the client hook API workflow, it is possible to add buttons to your layout. This can be done by adding new field(s) to your type(s), and configure the field type to "button". The usual layout features are available for buttons as well.
+
+If a button is pressed, an extra property is provided in the payload called `triggerFieldId` which will contain the `fieldId` value for the button that was pressed. 
+
+It comes with one extra configuration option, which is the ability to show a confirmation dialog to the user prior to actually sending the client hook payload to your endpoint. 
+
+This setting can be found on the button model field configuration, and is called "Require confirmation". If turned on, Mimir will not send a payload to your endpoint until the user confirms the dialog, and the dialog will be kept active until Mimir receives a response. 
+
+This is useful for cases where you need a guarantee that users cannot make additional changes while you're processing a request.
+
 ### Debugging
 
 It is possible to turn on extra verbose logging to get insight on how Mimir is creating the payloads and processing the responses, which will be valuable while developing your client hook endpoint(s).
