@@ -143,6 +143,18 @@ The fully documented payload with all possibilities:
         ...
     }
 
+    // Optionally instruct mimir to enable/disable one or more buttons in the layout
+    buttonStates: {
+      button_one: {
+        disabled: true,
+        tooltip: 'Fix something else first'
+      },
+      button_two: {
+        disabled: true,
+        tooltip: 'Please clear validation errors first'
+      }
+    }
+
     // Optionally instruct Mimir to enable/disable the save button for the user
     canSave: boolean,
 
@@ -208,6 +220,8 @@ If a button is pressed, an extra property is provided in the payload called `tri
 It comes with one extra configuration option, which is the ability to show a confirmation dialog to the user prior to actually sending the client hook payload to your endpoint. 
 
 This setting can be found on the button model field configuration, and is called "Require confirmation". If turned on, Mimir will not send a payload to your endpoint until the user confirms the dialog, and the dialog will be kept active until Mimir receives a response. 
+
+Note that it is also possible to enable / disable buttons with a tooltip explaining why on each client hook response Mimir receives, check the syntax above for more details.
 
 This is useful for cases where you need a guarantee that users cannot make additional changes while you're processing a request.
 
