@@ -51,7 +51,7 @@ Payloads will always include the latest data a user has entered, and will always
     // Always included
     userId: string; // The user that is performing changes
     formId: string; // The current selected metadata type
-    context: 'item_upload' | 'metadata_update' | 'metadata_merge' | 'copy_item' | 'new_item_version' | 'create_placeholder'; // The context of the metadata change
+    context: 'item_upload' | 'metadata_update' | 'metadata_merge' | 'copy_item' | 'new_item_version' | 'create_placeholder' | 'export_sequence'; // The context of the metadata change
     formData: { // An object containing all the field values at the time of sending
         [fieldId]: fieldValues,
         ...
@@ -63,13 +63,14 @@ Payloads will always include the latest data a user has entered, and will always
     // Included on every last call (typically when a user hits Save)
     finalization: true;
 
-    // Included with 'metadata_update' context
+    // Included with 'metadata_update' context.
     technicalMetadata: { 
         [fieldId]: fieldValues,
         ...
     }
 
-    // Included with 'create_placeholder' context
+    // Included with 'create_placeholder', 'export_sequence' context.
+    // For 'export_sequence' context we only allow 'video'.
     itemType: 'video' | 'image' | 'file' | 'audio'
 
     // Included with 'new_item_version' context
@@ -79,8 +80,12 @@ Payloads will always include the latest data a user has entered, and will always
     sourceItemId: string;
     copyMedia: 'high_res' | 'edit_proxy' | 'none'
 
-    // Included with 'metadata_update', 'item_upload', 'metadata_merge' contexts
-    itemId: string;
+    // Included with 'metadata_update', 'item_upload', 'metadata_merge', 'export_sequence' contexts.
+    // The itemId is `null` if the item has not been created yet. Included with 'export_sequence' context.
+    itemId: string | null;
+
+    // Included with 'export_sequence' context.
+    exportType: 'central_conform' | 'local_conform';
 
     // Included in create new version payload only
     versionsHistory: {
