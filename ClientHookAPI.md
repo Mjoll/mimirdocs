@@ -6,18 +6,18 @@ Mimir offers a client hook API mainly intended for custom metadata processing on
 
 1. Format user written values to a certain predefined format.
 2. Provide validation messages for specific fields back to a user that need to be addressed before metadata can be saved.
-3. Automatically fill in other metadata fields based on user changes. 
-4. Provide generic messages back to the user on any change. 
-5. Automatically save metadata after processing on behalf of a user. 
-6. Check whether the user is allowed to create a new version. 
+3. Automatically fill in other metadata fields based on user changes.
+4. Provide generic messages back to the user on any change.
+5. Automatically save metadata after processing on behalf of a user.
+6. Check whether the user is allowed to create a new version.
 
 The client hook API is intended for quick processing of metadata values. We recommend that your REST endpoint behaves in a deterministic way, and does not do heavy asynchronous processing to be able to set metadata on behalf of a user. For asynchronous workflows where server state needs to be taken into account, we recommend using our webhook API instead.
 
-The client hook API is *not* an event mechanism. There will be no information provided on what the user has changed per payload. 
+The client hook API is *not* an event mechanism. There will be no information provided on what the user has changed per payload.
 
-If Mimir has not received a response from your endpoint before a new payload is triggered by the user, the previous response from your endpoint will be ignored. 
+If Mimir has not received a response from your endpoint before a new payload is triggered by the user, the previous response from your endpoint will be ignored.
 
-This API contract does not entirely eliminate the potential for race conditions, but it does drastically reduce the chance for them occurring if implemented as advised. 
+This API contract does not entirely eliminate the potential for race conditions, but it does drastically reduce the chance for them occurring if implemented as advised.
 
 ### Pre requisites
 
@@ -37,7 +37,7 @@ We recommend securing your endpoint, for example configure a query parameter int
 
 Mimir will POST payloads whenever a user persists a change in a field. Here are some examples of when a payload will be POSTed to your endpoint:
 
-1. A user writes a string value into a text field, and exits the field. 
+1. A user writes a string value into a text field, and exits the field.
 2. A user enables or disables a checkbox field.
 3. A user selects a value from a dropdown
 4. A user ticks multiple values in a multiple choice dropdown and closes the dropdown
@@ -59,12 +59,12 @@ Payloads will always include the latest data a user has entered, and will always
 
     // Included on every first call
     initialization: true;
-    
+
     // Included on every last call (typically when a user hits Save)
     finalization: true;
 
     // Included with 'metadata_update' context.
-    technicalMetadata: { 
+    technicalMetadata: {
         [fieldId]: fieldValues,
         ...
     }
@@ -84,6 +84,9 @@ Payloads will always include the latest data a user has entered, and will always
     // The itemId is `null` if the item has not been created yet. Included with 'export_sequence' context.
     itemId: string | null;
 
+    // Included with 'metadata_update', 'item_upload', 'metadata_merge' contexts.
+    hasRestrictedMaterial: boolean;
+
     // Included with 'export_sequence' context.
     exportType: 'central_conform' | 'local_conform';
 
@@ -96,7 +99,7 @@ Payloads will always include the latest data a user has entered, and will always
 }
 ```
 
-Example first payload from `metadata_update` context: 
+Example first payload from `metadata_update` context:
 
 ```
 {
@@ -106,12 +109,13 @@ Example first payload from `metadata_update` context:
     "formData": {
         "title": "My item title",
         "createdOn": "2022-02-11T07:12:26.555Z",
-        "my_field": "My custom field value" 
+        "my_field": "My custom field value"
     },
     "technicalMetadata": {
         "duration": "1234.12"
     },
-    "initialization": true
+    "initialization": true,
+    hasRestrictedMaterial: false
 }
 ```
 
@@ -125,7 +129,7 @@ Example last payload from `copy_item` context:
     "formData": {
         "title": "My item title",
         "createdOn": "2022-02-11T07:12:26.555Z",
-        "my_field": "My custom field value" 
+        "my_field": "My custom field value"
     },
     "finalization": true
 }
@@ -135,7 +139,7 @@ Example last payload from `copy_item` context:
 
 Mimir expects a response from your endpoint. If the response is malformed or not recognized, Mimir will ignore the request.
 
-If Mimir does not receive a response before Mimir sends a new payload, the previous response will be ignored. 
+If Mimir does not receive a response before Mimir sends a new payload, the previous response will be ignored.
 
 The fully documented payload with all possibilities:
 
@@ -220,11 +224,11 @@ Example response for validation informing the user that something needs to be ad
 
 Specifically introduced for the client hook API workflow, it is possible to add buttons to your layout. This can be done by adding new field(s) to your type(s), and configure the field type to "button". The usual layout features are available for buttons as well.
 
-If a button is pressed, an extra property is provided in the payload called `triggerFieldId` which will contain the `fieldId` value for the button that was pressed. 
+If a button is pressed, an extra property is provided in the payload called `triggerFieldId` which will contain the `fieldId` value for the button that was pressed.
 
-It comes with one extra configuration option, which is the ability to show a confirmation dialog to the user prior to actually sending the client hook payload to your endpoint. 
+It comes with one extra configuration option, which is the ability to show a confirmation dialog to the user prior to actually sending the client hook payload to your endpoint.
 
-This setting can be found on the button model field configuration, and is called "Require confirmation". If turned on, Mimir will not send a payload to your endpoint until the user confirms the dialog, and the dialog will be kept active until Mimir receives a response. 
+This setting can be found on the button model field configuration, and is called "Require confirmation". If turned on, Mimir will not send a payload to your endpoint until the user confirms the dialog, and the dialog will be kept active until Mimir receives a response.
 
 Note that it is also possible to enable / disable buttons with a tooltip explaining why on each client hook response Mimir receives, check the syntax above for more details.
 
@@ -256,7 +260,8 @@ Mimir POSTs the initialization payload:
         "approved": ""
     },
     "context": "metadata_update",
-    "initialization": true
+    "initialization": true,
+    "hasRestrictedMaterial": false
 }
 ```
 
@@ -282,7 +287,7 @@ Let's indicate to the user that the `description` and `amount` fields are requir
 }
 ```
 
-2. User goes into description and enters a description. Once the user exist the field, a new payload is sent to your endpoint:
+2. User goes into description and enters a description. Once the user exits the field, a new payload is sent to your endpoint:
 
 ```
 {
@@ -293,7 +298,8 @@ Let's indicate to the user that the `description` and `amount` fields are requir
         "amount": "",
         "approved": ""
     },
-    "context": "metadata_update"
+    "context": "metadata_update",
+    "hasRestrictedMaterial": false
 }
 ```
 
@@ -357,7 +363,7 @@ Note that no message property was provided as there's no validation error to mak
         "description": "A description describing the item",
         "amount": 20.00,
         "approved": ""
-    }, 
+    },
     "message": {
         "general": "All fields are valid",
         "status": "success"
@@ -404,7 +410,7 @@ Alternatively you could have saved the metadata on behalf of the user after havi
         "description": "A description describing the item",
         "amount": 20.00,
         "approved": ""
-    }, 
+    },
     "doSaveMetadata": true
 }
 ```
